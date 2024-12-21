@@ -13,7 +13,6 @@ enum class WoundCategory {
     Laceration,
     Normal
 }
-
 class WoundClassifier(private val context: Context) {
     private var interpreter: Interpreter? = null
 
@@ -43,7 +42,7 @@ class WoundClassifier(private val context: Context) {
         return byteBuffer
     }
 
-    // Function to preprocess Bitmap image into a ByteBuffer with shape (150, 110, 3)
+    // Function to preprocess Bitmap image into a ByteBuffer with shape (224, 224, 3)
     private fun preprocessBitmap(bitmap: Bitmap): ByteBuffer {
         val inputSizeHeight = 224
         val inputSizeWidth = 224
