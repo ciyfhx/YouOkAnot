@@ -39,6 +39,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -72,7 +74,12 @@ class MainActivity : ComponentActivity() {
             YouOkAnotTheme {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavHost(navController = navController, innerPadding = innerPadding)
+                    Box(modifier = Modifier.fillMaxSize()){
+                        Image(painter = painterResource(R.drawable.background), contentDescription = "", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+
+                        AppNavHost(navController = navController, innerPadding = innerPadding)
+
+                    }
                 }
             }
         }
@@ -107,7 +114,8 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                 Row {
                     ElevatedCard(modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
                         Box(modifier = Modifier.fillMaxSize()) {
-//                            Image()
+                            Image(painter = painterResource(R.drawable.bandaid), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
+
                             Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
                                 Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
                                     Text("First Aid", fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
@@ -123,8 +131,11 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
 
                     ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
                         Box(modifier = Modifier.fillMaxSize()) {
+                            Image(painter = painterResource(R.drawable.clinic_8638587), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
+
                             Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
                                 Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
+
                                     Text(
                                         "Clinic",
                                         fontSize = 18.sp,
