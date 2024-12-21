@@ -68,46 +68,34 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                         val predicted = classifier.classify(bitmap)
                         val treatment = when(predicted) {
                             WoundCategory.Abrasion -> {
-                                Treatment("Abrasion", "\n1. Wash the wound with water and soap" +
-                                        "\n2. Remove any visible debris" +
-                                        "\n3. Dry the wound with a clean cloth" +
-                                        "\n4. (If have) Apply antibacterial ointment/cream to the wound")
+                                Treatment("Abrasion", "Wash the wound with water and soap" +
+                                        "\nRemove any visible debris" +
+                                        "\nDry the wound with a clean cloth" +
+                                        "\n(If have) Apply antibacterial ointment/cream to the wound")
                             }
 
                             WoundCategory.Bruises -> {
-                                Treatment("Bruises", "\n1. Wrap the ice around with a clean cloth and apply it on the bruise for 1 - 2 days" +
-                                        "2. \nIf ice is not available, leave it untouched" +
-                                        "3. \nAfter 2 days, start applying warm compress")
+                                Treatment("Bruises", "Wrap the ice around with a clean cloth and apply it on the bruise for 1 - 2 days" +
+                                        "\nIf ice is not available, leave it untouched" +
+                                        "\nAfter 2 days, start applying warm compress")
                             }
 
                             WoundCategory.Burns -> {
-                                Treatment("Burns", "\n1. Remove any clothing or jewellery near the burnt area" +
-                                        "\n2. Run the burnt area in running area" +
-                                        "\n3. If running water is not available, wrap ice around with a clean cloth and apply it on the burnt area" +
-                                        "\n4. DO NOT apply ice, toothpaste, oil, butter or any other remedies" +
-                                        "\n5. DO NOT burst the blister")
+                                Treatment("Burns", "Remove any clothing or jewellery near the burnt area" +
+                                        "\nRun the burnt area in running area" +
+                                        "\nIf running water is not available, wrap ice around with a clean cloth and apply it on the burnt area" +
+                                        "\nDO NOT apply ice, toothpaste, oil, butter or any other remedies" +
+                                        "\nDO NOT burst the blister")
                             }
-
-                            WoundCategory.Cut -> {
-                                Treatment("Cut", "\n1. Wash your hands\n" +
-                                        "2. Find a clean cloth and apply pressure on the wound until the bleeding stops\n" +
-                                        "3. Rinse the wound with clean water to rid it of any debris\n" +
-                                        "4. Apply bandage on the wound. If no bandage is available, find a clean cloth and wrap it around the wound\n" +
-                                        "5. If there is still bleeding, immediately seek a doctor")
-                            }
-
                             WoundCategory.Laceration -> {
-                                Treatment("Laceration", "\n1. Wash your hands\n" +
-                                        "2. Find a clean cloth and apply pressure on the wound until the bleeding stops\n" +
-                                        "3. Rinse the wound with clean water to rid it of any debris\n" +
-                                        "4. Apply bandage on the wound. If no bandage is available, find a clean cloth and wrap it around the wound\n" +
-                                        "5. If there is still bleeding, immediately seek a doctor")
+                                Treatment("Laceration", "Wash your hands\n" +
+                                        "Find a clean cloth and apply pressure on the wound until the bleeding stops\n" +
+                                        "Rinse the wound with clean water to rid it of any debris\n" +
+                                        "Apply bandage on the wound. If no bandage is available, find a clean cloth and wrap it around the wound\n" +
+                                        "If there is still bleeding, immediately seek a doctor")
                             }
-
-                            WoundCategory.Stab_wound -> {
-                                Treatment("Stab Wound", "\n1. Find a clean cloth and apply heavy downwards pressure on the wound to stop the bleeding\n" +
-                                        "2. Apply a bandage on the wound. If no bandage is available, find a clean cloth and wrap it around the wound\n" +
-                                        "3. Seek a doctor immediately")
+                            WoundCategory.Normal -> {
+                                Treatment("Normal", "You are fine!")
                             }
                         }
                         viewModel.setTreatment(treatment)
@@ -137,15 +125,12 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                     Text("Clinic")
                 }
             }
-
-
-
-
         }
         composable(MainActivity.Nav.TREATMENT_SCREEN.name) {
             WoundTreatmentScreen(
                 treatment = viewModel.treatment.value!! ,
-                woundImage = viewModel.image.value
+                woundImage = viewModel.image.value,
+                navController = navController
             )
         }
     }
