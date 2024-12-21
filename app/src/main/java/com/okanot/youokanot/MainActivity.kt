@@ -1,24 +1,45 @@
 package com.okanot.youokanot
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -61,20 +82,70 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
     val viewModel: ImageViewModel = viewModel()
+    // Camera permission request launcher
+    var hasPermission by remember { mutableStateOf(false) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasPermission = isGranted
+    }
+        // Request camera permission
+        // Use a side-effect to launch the permission request once
+        LaunchedEffect(Unit) {
+            if (!hasPermission) {
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
     NavHost(navController = navController, startDestination = MainActivity.Nav.CAMERA_SCREEN.name) {
         composable(MainActivity.Nav.CAMERA_SCREEN.name) {
+
             Column (
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Greeting(name = "You OK Anot", modifier = Modifier.padding(innerPadding))
-                
+                Row {
+                    ElevatedCard(modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+//                            Image()
+                            Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
+                                Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
+                                    Text("First Aid", fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                                }
+
+                            }
+
+                        }
+
+
+
+                    }
+
+                    ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
+                                Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
+                                    Text(
+                                        "Clinic",
+                                        fontSize = 18.sp,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+
                 CameraButton(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
                         .padding(16.dp) // Optional padding around the button
-                        .size(120.dp),  // Set a fixed size for the button
                 ) {
-                    bitmap ->
+                        bitmap ->
                     if (bitmap != null) {
                         viewModel.updateImage(bitmap)
                         val classifier = WoundClassifier(navController.context)
@@ -117,28 +188,6 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                     } else {
                         Toast.makeText(navController.context, "No image captured", Toast.LENGTH_LONG).show()
                     }
-                }
-                Button(
-                    onClick = { /* Implement any follow-up action here */ },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(10.dp) // Add padding around the button
-                        .height(50.dp)  // Increase height
-                        .width(180.dp)  // Set width to a fixed size
-                ) {
-                    Text("First Aid", fontSize = 18.sp)
-                }
-
-                // Clinic Button
-                Button(
-                    onClick = { /* Implement any follow-up action here */ },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                        .height(50.dp)
-                        .width(180.dp)
-                ) {
-                    Text("Clinic", fontSize = 18.sp)
                 }
             }
         }
