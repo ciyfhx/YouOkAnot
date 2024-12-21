@@ -8,13 +8,11 @@ import java.nio.ByteOrder
 
 enum class WoundCategory {
     Abrasion,
-    Stab_wound,
     Bruises,
-    Cut,
+    Burns,
     Laceration,
-    Burns
+    Normal
 }
-
 class WoundClassifier(private val context: Context) {
     private var interpreter: Interpreter? = null
 
@@ -26,7 +24,7 @@ class WoundClassifier(private val context: Context) {
     private fun initializeInterpreter() {
         val assetManager = context.assets
         // Load the model file from assets folder
-        val model = loadModelFile(assetManager, "model_quantized.tflite")
+        val model = loadModelFile(assetManager, "model_quantized_5.tflite")
         // Create the interpreter
         interpreter = Interpreter(model)
     }
@@ -44,10 +42,10 @@ class WoundClassifier(private val context: Context) {
         return byteBuffer
     }
 
-    // Function to preprocess Bitmap image into a ByteBuffer with shape (150, 110, 3)
+    // Function to preprocess Bitmap image into a ByteBuffer with shape (224, 224, 3)
     private fun preprocessBitmap(bitmap: Bitmap): ByteBuffer {
-        val inputSizeHeight = 150
-        val inputSizeWidth = 110
+        val inputSizeHeight = 224
+        val inputSizeWidth = 224
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, inputSizeWidth, inputSizeHeight, true)
 
         // Create a ByteBuffer to hold the pixel data
@@ -58,9 +56,9 @@ class WoundClassifier(private val context: Context) {
         for (y in 0 until inputSizeHeight) {
             for (x in 0 until inputSizeWidth) {
                 val pixel = resizedBitmap.getPixel(x, y)
-                val r = ((pixel shr 16) and 0xFF) / 255.0f
-                val g = ((pixel shr 8) and 0xFF) / 255.0f
-                val b = (pixel and 0xFF) / 255.0f
+                val r = ((pixel shr 16) and 0xFF).toFloat()
+                val g = ((pixel shr 8) and 0xFF).toFloat()
+                val b = (pixel and 0xFF).toFloat()
 
                 // Add RGB values to ByteBuffer
                 byteBuffer.putFloat(r)
@@ -79,7 +77,7 @@ class WoundClassifier(private val context: Context) {
         val input = preprocessBitmap(bitmap)
 
         // Assuming the model outputs 10 values (for example, a classification model with 10 categories)
-        val output = Array(1) { FloatArray(6) }  // Update the output size based on your model
+        val output = Array(1) { FloatArray(5) }  // Update the output size based on your model
         interpreter?.run(input, output)
         val result = output[0]
 
