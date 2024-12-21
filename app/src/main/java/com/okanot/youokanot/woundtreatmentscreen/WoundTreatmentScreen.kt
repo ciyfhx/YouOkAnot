@@ -52,16 +52,7 @@ fun WoundTreatmentScreen(treatment: Treatment, woundImage: Bitmap?, navControlle
     val steps = treatment.suggestedFirstAid.split("\n")
     val checkedStates = remember { mutableStateListOf(*Array(steps.size) { false }) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Wound Treatment Details") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         Box(Modifier.padding(8.dp)) {
             Image(painter = painterResource(R.drawable.background), contentDescription = "", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             Card {
