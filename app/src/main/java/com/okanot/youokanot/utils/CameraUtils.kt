@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CameraButton(onPhotoCaptured: (Bitmap?) -> Unit) {
+fun CameraButton(modifier: Modifier, onPhotoCaptured: (Bitmap?) -> Unit) {
     // State to track permission result
     var hasPermission by remember { mutableStateOf(false) }
 
@@ -41,8 +41,8 @@ fun CameraButton(onPhotoCaptured: (Bitmap?) -> Unit) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
+            .wrapContentSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

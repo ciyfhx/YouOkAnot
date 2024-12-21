@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -59,9 +63,18 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
     val viewModel: ImageViewModel = viewModel()
     NavHost(navController = navController, startDestination = MainActivity.Nav.CAMERA_SCREEN.name) {
         composable(MainActivity.Nav.CAMERA_SCREEN.name) {
-            Column {
+            Column (
+                modifier = Modifier.fillMaxSize()
+            ) {
                 Greeting(name = "You OK Anot", modifier = Modifier.padding(innerPadding))
-                CameraButton { bitmap ->
+                
+                CameraButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp) // Optional padding around the button
+                        .size(120.dp),  // Set a fixed size for the button
+                ) {
+                    bitmap ->
                     if (bitmap != null) {
                         viewModel.updateImage(bitmap)
                         val classifier = WoundClassifier(navController.context)
@@ -117,24 +130,27 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                         Toast.makeText(navController.context, "No image captured", Toast.LENGTH_LONG).show()
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 Button(
                     onClick = { /* Implement any follow-up action here */ },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(10.dp) // Add padding around the button
+                        .height(50.dp)  // Increase height
+                        .width(180.dp)  // Set width to a fixed size
                 ) {
-                    Text("First Aid")
+                    Text("First Aid", fontSize = 18.sp)
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 // Clinic Button
                 Button(
                     onClick = { /* Implement any follow-up action here */ },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
+                        .height(50.dp)
+                        .width(180.dp)
                 ) {
-                    Text("Clinic")
+                    Text("Clinic", fontSize = 18.sp)
                 }
             }
 
