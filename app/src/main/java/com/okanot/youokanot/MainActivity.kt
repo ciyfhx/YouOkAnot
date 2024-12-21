@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -111,44 +112,46 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Row {
-                    ElevatedCard(modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Image(painter = painterResource(R.drawable.bandaid), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
+                Column(Modifier.fillMaxWidth()) {
+                    Text("You ok anot?", fontSize = 36.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        ElevatedCard(modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Image(painter = painterResource(R.drawable.bandaid), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
 
-                            Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
-                                Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
-                                    Text("First Aid", fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-                                }
+                                Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
+                                    Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
+                                        Text("First Aid", fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                                    }
 
-                            }
-
-                        }
-
-
-
-                    }
-
-                    ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Image(painter = painterResource(R.drawable.clinic_8638587), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
-
-                            Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
-                                Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
-
-                                    Text(
-                                        "Clinic",
-                                        fontSize = 18.sp,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
                                 }
 
                             }
                         }
 
+                        ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Image(painter = painterResource(R.drawable.clinic_8638587), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
+
+                                Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxHeight()) {
+                                    Box(modifier = Modifier.fillMaxWidth().background(color = Color(1f,1f,1f,0.5f))) {
+
+                                        Text(
+                                            "Clinic",
+                                            fontSize = 18.sp,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+
+                                }
+                            }
+
+                        }
                     }
+
                 }
+
 
                 CameraButton(
                     modifier = Modifier

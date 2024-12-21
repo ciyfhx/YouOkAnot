@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -60,8 +62,11 @@ fun WoundTreatmentScreen(treatment: Treatment, woundImage: Bitmap?, navControlle
             )
         }
     ) { innerPadding ->
-        Box {
+        Box(Modifier.padding(8.dp)) {
             Image(painter = painterResource(R.drawable.background), contentDescription = "", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+            Card {
+
+            }
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -107,20 +112,25 @@ fun WoundTreatmentScreen(treatment: Treatment, woundImage: Bitmap?, navControlle
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyLarge
                 )
+                ElevatedCard {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        steps.forEachIndexed { index, step ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(checked = checkedStates[index], onCheckedChange = {checkedStates[index] = !checkedStates[index] })
+                                Text(
+                                    text = step,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Start,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
 
-                steps.forEachIndexed { index, step ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = checkedStates[index], onCheckedChange = {checkedStates[index] = !checkedStates[index] })
-                        Text(
-                            text = step,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-
+                            }
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+
                 }
+
 
 
 
