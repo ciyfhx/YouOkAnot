@@ -1,7 +1,9 @@
 package com.okanot.youokanot.utils
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CameraButton() {
+fun CameraButton(onPhotoCaptured: (Bitmap?) -> Unit) {
     // State to track permission result
     var hasPermission by remember { mutableStateOf(false) }
 
@@ -29,6 +31,13 @@ fun CameraButton() {
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         // Handle the result if needed (e.g., check if photo was taken)
+        val photoCaptured = if (it.resultCode == Activity.RESULT_OK) {
+            it.data?.extras?.get("data") as? Bitmap
+        } else {
+            null
+        }
+        onPhotoCaptured(photoCaptured)
+
     }
 
     Column(
