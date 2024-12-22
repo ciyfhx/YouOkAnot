@@ -221,6 +221,7 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
             NearbyClinicsScreen(
                 clinicLocations = mutableListOf(
                     ClinicLocation("1", 1.3521, 103.8198),
+                    ClinicLocation("2", 1.3621, 103.8198),
 
                 )
             )

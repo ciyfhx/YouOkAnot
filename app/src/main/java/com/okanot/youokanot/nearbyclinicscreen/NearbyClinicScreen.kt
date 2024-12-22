@@ -6,8 +6,14 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,12 +23,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mapbox.common.location.AccuracyLevel
 import com.mapbox.common.location.DeviceLocationProvider
 import com.mapbox.common.location.IntervalSettings
 import com.mapbox.common.location.Location
 import com.mapbox.common.location.LocationObserver
-import com.mapbox.common.location.LocationProvider
 import com.mapbox.common.location.LocationProviderRequest
 import com.mapbox.common.location.LocationService
 import com.mapbox.common.location.LocationServiceFactory
@@ -31,15 +40,15 @@ import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import com.mapbox.maps.extension.compose.annotation.generated.CircleAnnotation
-import com.mapbox.maps.plugin.PuckBearing
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.extension.compose.annotation.ViewAnnotation
+import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.rememberIconImage
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.viewport.data.DefaultViewportTransitionOptions
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
-import com.mapbox.maps.plugin.viewport.data.OverviewViewportStateOptions
+import com.mapbox.maps.viewannotation.geometry
+import com.mapbox.maps.viewannotation.viewAnnotationOptions
+import com.okanot.youokanot.R
 
 @Composable
 fun NearbyClinicsScreen(
@@ -89,7 +98,7 @@ fun NearbyClinicsScreen(
             }
         }
     }
-
+    val marker = rememberIconImage(key = R.drawable.cross, painter = painterResource(R.drawable.cross))
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -107,13 +116,41 @@ fun NearbyClinicsScreen(
         ){
 
             clinicLocations.forEach{ clinic ->
-                CircleAnnotation(point = Point.fromLngLat(clinic.longitude, clinic.latitude)) {
-                    // Style the circle that will be added to the map.
-                    circleRadius = 8.0
-                    circleColor = Color(0xffee4e8b)
-                    circleStrokeWidth = 2.0
-                    circleStrokeColor = Color(0xffffffff)
+//                CircleAnnotation(point = Point.fromLngLat(clinic.longitude, clinic.latitude)) {
+//                    // Style the circle that will be added to the map.
+//                    circleRadius = 8.0
+//                    circleColor = Color(0xffee4e8b)
+//                    circleStrokeWidth = 2.0
+//                    circleStrokeColor = Color(0xffffffff)
+//                }
+                var showViewAnnotation by remember {
+                    mutableStateOf(false)
                 }
+                // Insert a PointAnnotation composable function with the geographic coordinate to the content of MapboxMap composable function.
+                if (showViewAnnotation) {
+                    ViewAnnotation(
+                        options = viewAnnotationOptions {
+                            geometry(Point.fromLngLat(clinic.longitude, clinic.latitude))
+                        }
+                    ) {
+                        ViewAnnotationContent(clinic.name){
+                            showViewAnnotation = !showViewAnnotation
+                        }
+                    }
+                }else{
+                    PointAnnotation(point = Point.fromLngLat(clinic.longitude, clinic.latitude)) {
+                        // specify the marker image
+                        iconImage = marker
+
+                        interactionsState.onClicked {
+                            showViewAnnotation = !showViewAnnotation
+                            true
+                        }
+                }
+
+
+                }
+
             }
 
             MapEffect(Unit) { mapView ->
@@ -162,6 +199,25 @@ private fun fetchUserLocation(onLocationFetched: (Location) -> Unit) {
         }
     }
     locationProvider!!.addLocationObserver(locationObserver)
+}
+
+// Define the content of the ViewAnnotation, for example create a minimal Text composable function:
+@Composable
+fun ViewAnnotationContent(value: String, onClick: () -> Unit) {
+    Text(
+        text = value,
+        modifier = Modifier
+            .padding(3.dp)
+            .width(100.dp)
+            .height(60.dp)
+            .background(
+                Color.White
+            ).clickable(enabled = true) {
+                onClick()
+            },
+        textAlign = TextAlign.Center,
+        fontSize = 20.sp
+    )
 }
 
 // Data class for clinic information
