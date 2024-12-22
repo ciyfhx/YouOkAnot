@@ -54,6 +54,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.okanot.youokanot.model.WoundCategory
 import com.okanot.youokanot.model.WoundClassifier
+import com.okanot.youokanot.nearbyclinicscreen.ClinicLocation
+import com.okanot.youokanot.nearbyclinicscreen.NearbyClinicsScreen
 import com.okanot.youokanot.ui.theme.YouOkAnotTheme
 import com.okanot.youokanot.utils.CameraButton
 import com.okanot.youokanot.viewmodels.ImageViewModel
@@ -64,7 +66,8 @@ class MainActivity : ComponentActivity() {
 
     enum class Nav {
         CAMERA_SCREEN,
-        TREATMENT_SCREEN
+        TREATMENT_SCREEN,
+        NEARBY_CLINIC_SCREEN
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +132,9 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                             }
                         }
 
-                        ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp)) {
+                        ElevatedCard (modifier = Modifier.size(width=180.dp, height=180.dp).padding(8.dp), onClick = {
+                            navController.navigate(MainActivity.Nav.NEARBY_CLINIC_SCREEN.name)
+                        }) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Image(painter = painterResource(R.drawable.clinic_8638587), contentDescription = "", modifier = Modifier.fillMaxSize().padding(24.dp), contentScale = ContentScale.Crop)
 
@@ -210,6 +215,14 @@ fun AppNavHost(navController: NavHostController, innerPadding: PaddingValues) {
                 treatment = viewModel.treatment.value!! ,
                 woundImage = viewModel.image.value,
                 navController = navController
+            )
+        }
+        composable(MainActivity.Nav.NEARBY_CLINIC_SCREEN.name) {
+            NearbyClinicsScreen(
+                clinicLocations = mutableListOf(
+                    ClinicLocation("1", 1.3521, 103.8198),
+
+                )
             )
         }
     }

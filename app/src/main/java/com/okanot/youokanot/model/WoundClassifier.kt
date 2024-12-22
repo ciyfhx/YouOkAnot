@@ -24,7 +24,7 @@ class WoundClassifier(private val context: Context) {
     private fun initializeInterpreter() {
         val assetManager = context.assets
         // Load the model file from assets folder
-        val model = loadModelFile(assetManager, "model_quantized_5.tflite")
+        val model = loadModelFile(assetManager, "model_quantized.tflite")
         // Create the interpreter
         interpreter = Interpreter(model)
     }

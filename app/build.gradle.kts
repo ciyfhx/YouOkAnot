@@ -59,6 +59,12 @@ dependencies {
 
     implementation(libs.tensorflow.lite)
 
+    implementation(libs.mapbox)
+    implementation(libs.mapbox.compose)
+    implementation(libs.play.services.location)
+
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
