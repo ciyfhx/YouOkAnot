@@ -201,13 +201,17 @@ private fun fetchUserLocation(onLocationFetched: (Location) -> Unit) {
     } else {
         Log.e(TAG, "Failed to get device location provider")
     }
-    val locationObserver = LocationObserver { locations ->
-        Log.e(TAG, "Location update received: $locations")
-        for (location in locations){
-            onLocationFetched(location)
-        }
+//    val locationObserver = LocationObserver { locations ->
+//        Log.e(TAG, "Location update received: $locations")
+//        for (location in locations){
+//            onLocationFetched(location)
+//        }
+//    }
+//    locationProvider!!.addLocationObserver(locationObserver)
+
+    locationProvider!!.getLastLocation {
+        onLocationFetched(it!!)
     }
-    locationProvider!!.addLocationObserver(locationObserver)
 }
 
 // Define the content of the ViewAnnotation, for example create a minimal Text composable function:
