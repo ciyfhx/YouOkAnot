@@ -3,16 +3,23 @@ package com.okanot.youokanot.nearbyclinicscreen
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -133,7 +140,7 @@ fun NearbyClinicsScreen(
                             geometry(Point.fromLngLat(clinic.longitude, clinic.latitude))
                         }
                     ) {
-                        ViewAnnotationContent(clinic.name){
+                        ViewAnnotationContent(context, clinic){
                             showViewAnnotation = !showViewAnnotation
                         }
                     }
@@ -203,21 +210,42 @@ private fun fetchUserLocation(onLocationFetched: (Location) -> Unit) {
 
 // Define the content of the ViewAnnotation, for example create a minimal Text composable function:
 @Composable
-fun ViewAnnotationContent(value: String, onClick: () -> Unit) {
-    Text(
-        text = value,
-        modifier = Modifier
-            .padding(3.dp)
-            .width(100.dp)
-            .height(60.dp)
-            .background(
-                Color.White
-            ).clickable(enabled = true) {
-                onClick()
-            },
-        textAlign = TextAlign.Center,
-        fontSize = 20.sp
+fun ViewAnnotationContent(context: Context, clinicLocation: ClinicLocation, onClick: () -> Unit) {
+    val coordinatesUri = Uri.parse(
+        "geo:${clinicLocation.latitude},${clinicLocation.longitude}?q=${clinicLocation.latitude},${clinicLocation.longitude}(${clinicLocation.name})"
     )
+    val intent = Intent(Intent.ACTION_VIEW, coordinatesUri)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Text(
+            text = clinicLocation.name,
+            modifier = Modifier
+                .padding(3.dp)
+                .width(100.dp)
+                .height(60.dp)
+                .background(
+                    Color.White
+                ).clickable(enabled = true) {
+                    onClick()
+                },
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+        Button(
+            onClick = {
+                context.startActivity(intent)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Open Directions", fontSize = 18.sp)
+        }
+    }
+
 }
 
 // Data class for clinic information
