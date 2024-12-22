@@ -98,7 +98,7 @@ fun NearbyClinicsScreen(
                 userLocation = location
                 with(mapViewportState) {
                     setCameraOptions {
-//                        zoom(2.0)
+                        zoom(15.0)
                         center(Point.fromLngLat(userLocation!!.longitude, userLocation!!.latitude))
 //                        pitch(0.0)
 //                        bearing(0.0)
